@@ -1,33 +1,40 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BaseCharacter.h"
-
+#include "Engine.h"
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
+void ABaseCharacter::MoveForward(float Value)
+{
+	FVector Direction = FRotationMatrix(GetActorRotation()).GetScaledAxis(EAxis::X).GetClampedToMaxSize(1.f);
+	AddMovementInput(Direction, Value);
+}
+
+void ABaseCharacter::MoveRight(float Value)
+{
+	FVector Direction = FRotationMatrix(GetActorRotation()).GetScaledAxis(EAxis::Y).GetClampedToMaxSize(1.f);
+	AddMovementInput(Direction, Value);
+}
