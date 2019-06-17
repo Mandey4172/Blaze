@@ -7,6 +7,26 @@ ABaseCharacter::ABaseCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	UCharacterMovementComponent * movementComponent = GetCharacterMovement();
+	if (movementComponent)
+	{
+		movementComponent->MaxAcceleration = 2800.f;
+		movementComponent->BrakingFriction = 5;
+		movementComponent->bUseSeparateBrakingFriction = true;
+
+		movementComponent->SetWalkableFloorAngle(45.f);
+		movementComponent->GroundFriction = 10.5f;
+		movementComponent->MaxWalkSpeed = 520.f;
+		movementComponent->MaxWalkSpeedCrouched = 250.f;
+		movementComponent->BrakingDecelerationWalking = 620.f;
+
+		movementComponent->JumpZVelocity = 520.f;
+		movementComponent->AirControl = 0.55f;
+		movementComponent->AirControlBoostVelocityThreshold = 5.f;
+
+		movementComponent->NavWalkingFloorDistTolerance = 5.f;
+	}
 }
 
 // Called when the game starts or when spawned

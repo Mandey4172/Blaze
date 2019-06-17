@@ -14,9 +14,11 @@ APlayerCharacter::APlayerCharacter()
 	cameraSpringArm->TargetArmLength = 10.f;
 	cameraSpringArm->bEnableCameraLag = true;
 	cameraSpringArm->CameraLagSpeed = 3.0f;
+	cameraSpringArm->CameraLagMaxDistance = 10.f;
 
 	cameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
 	cameraComponent->SetupAttachment(cameraSpringArm, USpringArmComponent::SocketName);
+	cameraComponent->bUsePawnControlRotation = true;
 
 	firstPersonMesh = CreateDefaultSubobject<USkeletalMeshComponent>("First Person Mesh");
 	firstPersonMesh->AttachTo(GetRootComponent());
@@ -39,9 +41,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent * PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	InputComponent->BindAxis("MoveForward", this, &ABaseCharacter::MoveForward);
-	InputComponent->BindAxis("MoveRight", this, &ABaseCharacter::MoveRight);
+	InputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
+	InputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
-	InputComponent->BindAxis("Turn", this, &ABaseCharacter::AddControllerYawInput);
-	InputComponent->BindAxis("LookUp", this, &ABaseCharacter::AddControllerPitchInput);
+	InputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
+	InputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
+	
+	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed,this, &APlayerCharacter::Jump);
 }
