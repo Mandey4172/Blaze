@@ -2,20 +2,18 @@
 
 #pragma once
 
-#include "BaseProjectile.h"
-
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BaseWeapon.generated.h"
+#include "BaseProjectile.generated.h"
 
 UCLASS()
-class BLAZE_API ABaseWeapon : public AActor
+class BLAZE_API ABaseProjectile : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	ABaseWeapon();
+	ABaseProjectile();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,10 +22,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent* meshComponent;
-	//protected:
-	UPROPERTY(EditDefaultsOnly, Category = Damage)
-		TSubclassOf<ABaseProjectile> projectileClass;
+	UPROPERTY(VisibleAnywhere)
+		class USphereComponent* colisionComponent;
 };
