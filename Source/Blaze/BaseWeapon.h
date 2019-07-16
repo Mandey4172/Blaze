@@ -21,13 +21,21 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
+		FVector offset;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+		virtual void Shoot();
+
 	UPROPERTY(VisibleAnywhere)
-		class UStaticMeshComponent* meshComponent;
+		class USkeletalMeshComponent* meshComponent;
+	UPROPERTY(VisibleAnywhere)
+		class UBoxComponent* collisionComponent;
 	//protected:
 	UPROPERTY(EditDefaultsOnly, Category = Damage)
-		TSubclassOf<ABaseProjectile> projectileClass;
+		TSubclassOf<class ABaseProjectile> projectileClass;
 };
