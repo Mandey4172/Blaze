@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\Blaze.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{57A0AD7D-DE3C-4BF6-8484-B436C5C3BA56}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Blaze.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\BlazeEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\.gitignore" />
+    <None Include="..\..\LICENSE.md" />
+    <None Include="..\..\README.md" />
+    <Filter Include="Source\Blaze">
+      <UniqueIdentifier>{9E35BF9D-C412-4695-905C-032871C15E06}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Blaze\BaseCharacter.cpp">
+      <Filter>Source\Blaze</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Blaze\BaseCharacter.h">
+      <Filter>Source\Blaze</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Blaze\BaseProjectile.cpp">
+      <Filter>Source\Blaze</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Blaze\BaseProjectile.h">
+      <Filter>Source\Blaze</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Blaze\BaseWeapon.cpp">
+      <Filter>Source\Blaze</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Blaze\BaseWeapon.h">
+      <Filter>Source\Blaze</Filter>
+    </ClInclude>
+    <None Include="..\..\Source\Blaze\Blaze.Build.cs">
+      <Filter>Source\Blaze</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\Blaze\Blaze.cpp">
+      <Filter>Source\Blaze</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Blaze\Blaze.h">
+      <Filter>Source\Blaze</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Blaze\BlazeGameModeBase.cpp">
+      <Filter>Source\Blaze</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Blaze\BlazeGameModeBase.h">
+      <Filter>Source\Blaze</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
