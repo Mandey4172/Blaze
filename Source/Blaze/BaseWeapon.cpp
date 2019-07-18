@@ -10,11 +10,13 @@ ABaseWeapon::ABaseWeapon()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	collisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Component"));
-	collisionComponent->SetupAttachment(GetRootComponent());
+	UBoxComponent * initialCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Component"));
+	initialCollisionComponent->SetupAttachment(GetRootComponent());
+	collisionComponent = initialCollisionComponent;
 
-	meshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh Component"));
-	meshComponent->SetupAttachment(collisionComponent);
+	USkeletalMeshComponent * initialMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh Component"));
+	initialMeshComponent->SetupAttachment(collisionComponent);
+	meshComponent = initialMeshComponent;
 }
 
 // Called when the game starts or when spawned
@@ -40,4 +42,14 @@ void ABaseWeapon::Shoot()
 		if (projectile)
 			projectile->OnFire(rotation.Vector());
 	}
+}
+
+UMeshComponent * ABaseWeapon::GetMeshComponent()
+{
+	return meshComponent;
+}
+
+UShapeComponent * ABaseWeapon::GetColisionComponent()
+{
+	return collisionComponent;
 }

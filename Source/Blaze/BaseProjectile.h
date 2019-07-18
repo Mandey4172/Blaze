@@ -20,17 +20,32 @@ public:
 
 	virtual void OnFire(FVector direction);
 
-	UPROPERTY(VisibleAnywhere)
-		class UStaticMeshComponent* meshComponent;
-	UPROPERTY(VisibleAnywhere)
-		class USphereComponent* colisionComponent;
-	UPROPERTY(VisibleAnywhere)
-		class UProjectileMovementComponent* movementComponent;
+	UFUNCTION(BlueprintCallable)
+		class UMeshComponent* GetMeshComponent();
+
+	UFUNCTION(BlueprintCallable)
+		class UShapeComponent* GetColisionComponent();
+
+	UFUNCTION(BlueprintCallable)
+		class UMovementComponent* GetMovementComponent();
+
+	UFUNCTION(BlueprintCallable)
+		void SetInitialSpeed(const float& newInitialSpeed);
+	UFUNCTION(BlueprintCallable)
+		float GetInitialSpeed();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+public:
+protected:
+	UPROPERTY(VisibleAnywhere)
+		class UMeshComponent* meshComponent;
+	UPROPERTY(VisibleAnywhere)
+		class UShapeComponent* colisionComponent;
+	UPROPERTY(VisibleAnywhere)
+		class UMovementComponent* movementComponent;
 	UPROPERTY(EditAnywhere)
 		float initialSpeed;
 };
