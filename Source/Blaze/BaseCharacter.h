@@ -35,4 +35,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = Damage)
 		TSubclassOf<class ABaseWeapon> equpedWeaponClass;
 	class ABaseWeapon * equpedWeapon;
+
+	double y;
 };
