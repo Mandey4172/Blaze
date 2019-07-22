@@ -2,6 +2,8 @@
 
 #include "BaseCharacter.h"
 #include "Engine.h"
+#include "BaseWeapon.h"
+
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
@@ -27,12 +29,14 @@ ABaseCharacter::ABaseCharacter()
 
 		movementComponent->NavWalkingFloorDistTolerance = 5.f;
 	}
+	equpedWeaponClass = ABaseWeapon::StaticClass();
 }
 
 // Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	EquipWeapon(equpedWeaponClass);
 }
 
 // Called every frame
@@ -53,8 +57,23 @@ void ABaseCharacter::MoveForward(float Value)
 	AddMovementInput(Direction, Value);
 }
 
+void ABaseCharacter::EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass)
+{
+	equpedWeaponClass = newActiveWeaponClass;
+	UWorld * world = GetWorld();
+	if (world && equpedWeaponClass)
+	{
+		equpedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
+	}
+}
+
 void ABaseCharacter::MoveRight(float Value)
 {
 	FVector Direction = FRotationMatrix(GetActorRotation()).GetScaledAxis(EAxis::Y).GetClampedToMaxSize(1.f);
 	AddMovementInput(Direction, Value);
+}
+
+ABaseWeapon* ABaseCharacter::GetEquipedWeapon()
+{
+	return equpedWeapon;
 }
