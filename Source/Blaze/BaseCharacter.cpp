@@ -64,6 +64,7 @@ void ABaseCharacter::EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponC
 	if (world && equpedWeaponClass)
 	{
 		equpedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
+		equpedWeapon->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	}
 }
 

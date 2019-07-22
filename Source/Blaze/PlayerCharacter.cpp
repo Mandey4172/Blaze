@@ -12,8 +12,7 @@ APlayerCharacter::APlayerCharacter()
 	cameraSpringArm->SetupAttachment(GetRootComponent());
 	cameraSpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 50.0f), FRotator(0.0f, 0.0f, 0.0f));
 	cameraSpringArm->TargetArmLength = 10.f;
-	cameraSpringArm->bEnableCameraLag = true;
-	cameraSpringArm->CameraLagSpeed = 3.0f;
+	cameraSpringArm->bEnableCameraLag = false;
 	cameraSpringArm->CameraLagMaxDistance = 10.f;
 
 	cameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
