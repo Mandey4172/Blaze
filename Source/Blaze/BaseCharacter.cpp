@@ -77,7 +77,7 @@ void ABaseCharacter::MoveRight(float Value)
 void ABaseCharacter::Attack()
 {
 	if (equpedWeapon)
-		equpedWeapon->UseThis(GetActorLocation(), GetActorRotation());
+		equpedWeapon->Shoot(GetActorLocation(), GetActorRotation());
 }
 
 ABaseWeapon* ABaseCharacter::GetEquipedWeapon()

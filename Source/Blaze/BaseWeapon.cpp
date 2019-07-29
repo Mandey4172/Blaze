@@ -32,7 +32,7 @@ void ABaseWeapon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ABaseWeapon::UseThis(FVector location, FRotator rotation)
+void ABaseWeapon::Shoot(FVector location, FRotator rotation)
 {
 	UWorld* world = GetWorld();
 	if (world)

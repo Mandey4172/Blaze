@@ -70,5 +70,5 @@ void APlayerCharacter::Attack()
 	GetActorEyesViewPoint(location, rotation);
 
 	if (equpedWeapon)
-		equpedWeapon->UseThis(GetActorLocation(), GetActorRotation());
+		equpedWeapon->Shoot(GetActorLocation(), GetActorRotation());
 }
