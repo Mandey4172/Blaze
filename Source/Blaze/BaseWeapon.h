@@ -21,7 +21,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void Shoot();
+		virtual void UseThis(FVector location, FRotator rotation);
 	UFUNCTION(BlueprintCallable)
 		class UMeshComponent* GetMeshComponent();
 	UFUNCTION(BlueprintCallable)

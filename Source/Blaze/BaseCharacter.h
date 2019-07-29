@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "Core.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
@@ -21,8 +21,16 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable, Category = "GCharacter")
+		void MoveForward(float Value);
+	UFUNCTION(BlueprintCallable, Category = "GCharacter")
+		void MoveRight(float Value);
+
 	UFUNCTION(BlueprintCallable)
-		void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
+		virtual void Attack();
+
+	UFUNCTION(BlueprintCallable)
+		virtual void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
 	UFUNCTION(BlueprintCallable)
 		class ABaseWeapon* GetEquipedWeapon();
 
@@ -36,5 +44,5 @@ protected:
 		TSubclassOf<class ABaseWeapon> equpedWeaponClass;
 	class ABaseWeapon * equpedWeapon;
 
-	double y;
+	const FName weaponMeshSocket = TEXT("WeaponMeshSocket");
 };
