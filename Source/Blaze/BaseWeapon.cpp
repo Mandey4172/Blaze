@@ -3,6 +3,7 @@
 #include "BaseWeapon.h"
 #include "Engine.h"
 #include "BaseProjectile.h"
+#include "BaseCharacter.h"
 
 // Sets default values
 ABaseWeapon::ABaseWeapon()
@@ -31,13 +32,12 @@ void ABaseWeapon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ABaseWeapon::Shoot()
+void ABaseWeapon::UseThis(FVector location, FRotator rotation)
 {
 	UWorld* world = GetWorld();
 	if (world)
 	{
-		FVector location = GetActorLocation() + offset;
-		FRotator rotation = GetActorRotation();
+		location = location + offset;
 		ABaseProjectile * projectile = world->SpawnActor<ABaseProjectile>(projectileClass, location, rotation);
 		if (projectile)
 			projectile->OnFire(rotation.Vector());

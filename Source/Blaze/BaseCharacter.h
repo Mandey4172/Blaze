@@ -25,9 +25,12 @@ public:
 		void MoveForward(float Value);
 	UFUNCTION(BlueprintCallable, Category = "GCharacter")
 		void MoveRight(float Value);
-		
+
 	UFUNCTION(BlueprintCallable)
-		void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
+		virtual void Attack();
+
+	UFUNCTION(BlueprintCallable)
+		virtual void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
 	UFUNCTION(BlueprintCallable)
 		class ABaseWeapon* GetEquipedWeapon();
 
@@ -40,4 +43,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = Damage)
 		TSubclassOf<class ABaseWeapon> equpedWeaponClass;
 	class ABaseWeapon * equpedWeapon;
+
+	const FName weaponMeshSocket = TEXT("WeaponMeshSocket");
 };

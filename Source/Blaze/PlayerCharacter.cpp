@@ -2,6 +2,7 @@
 
 #include "PlayerCharacter.h"
 #include "Engine.h"
+#include "BaseWeapon.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -45,6 +46,29 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent * PlayerInputCo
 
 	InputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
 	InputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
-	
-	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed,this, &APlayerCharacter::Jump);
+
+	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &APlayerCharacter::Jump);
+
+	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &APlayerCharacter::Attack);
+}
+
+void APlayerCharacter::EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass)
+{
+	equpedWeaponClass = newActiveWeaponClass;
+	UWorld * world = GetWorld();
+	if (world && equpedWeaponClass)
+	{
+		equpedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
+		equpedWeapon->AttachToComponent(firstPersonMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, weaponMeshSocket);
+	}
+}
+
+void APlayerCharacter::Attack()
+{
+	FVector location;
+	FRotator rotation;
+	GetActorEyesViewPoint(location, rotation);
+
+	if (equpedWeapon)
+		equpedWeapon->UseThis(GetActorLocation(), GetActorRotation());
 }

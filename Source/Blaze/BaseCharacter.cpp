@@ -64,7 +64,7 @@ void ABaseCharacter::EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponC
 	if (world && equpedWeaponClass)
 	{
 		equpedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
-		equpedWeapon->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		equpedWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, weaponMeshSocket);
 	}
 }
 
@@ -72,6 +72,12 @@ void ABaseCharacter::MoveRight(float Value)
 {
 	FVector Direction = FRotationMatrix(GetActorRotation()).GetScaledAxis(EAxis::Y).GetClampedToMaxSize(1.f);
 	AddMovementInput(Direction, Value);
+}
+
+void ABaseCharacter::Attack()
+{
+	if (equpedWeapon)
+		equpedWeapon->UseThis(GetActorLocation(), GetActorRotation());
 }
 
 ABaseWeapon* ABaseCharacter::GetEquipedWeapon()
