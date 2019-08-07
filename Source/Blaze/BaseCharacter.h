@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "Core.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
@@ -15,15 +15,34 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable, Category = "GCharacter")
+		void MoveForward(float Value);
+	UFUNCTION(BlueprintCallable, Category = "GCharacter")
+		void MoveRight(float Value);
+
+	UFUNCTION(BlueprintCallable)
+		virtual void Attack();
+
+	UFUNCTION(BlueprintCallable)
+		virtual void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
+	UFUNCTION(BlueprintCallable)
+		class ABaseWeapon* GetEquipedWeapon();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = Damage)
+		TSubclassOf<class ABaseWeapon> equpedWeaponClass;
+	class ABaseWeapon * equpedWeapon;
+
+	const FName weaponMeshSocket = TEXT("WeaponMeshSocket");
 };

@@ -9,15 +9,19 @@ ABaseProjectile::ABaseProjectile()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	colisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collicion Component"));
-	colisionComponent->SetupAttachment(GetRootComponent());
+	USphereComponent * initialColisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collicion Component"));
+	initialColisionComponent->SetupAttachment(GetRootComponent());
+	colisionComponent = initialColisionComponent;
 
-	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
-	meshComponent->SetupAttachment(colisionComponent);
+	UStaticMeshComponent * initialMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
+	initialMeshComponent->SetupAttachment(colisionComponent);
+	meshComponent = initialMeshComponent;
 
-	movementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement Component"));
-	movementComponent->Velocity = FVector::ZeroVector;
-	movementComponent->ProjectileGravityScale = 0;
+	UProjectileMovementComponent * initialMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement Component"));
+	initialMovementComponent->Velocity = FVector::ZeroVector;
+	initialMovementComponent->ProjectileGravityScale = 0;
+	movementComponent = initialMovementComponent;
+
 	initialSpeed = 10000.f;
 }
 
@@ -36,4 +40,29 @@ void ABaseProjectile::Tick(float DeltaTime)
 void ABaseProjectile::OnFire(FVector direction)
 {
 	movementComponent->Velocity = initialSpeed * direction.GetClampedToMaxSize(1.0f);
+}
+
+UMeshComponent * ABaseProjectile::GetMeshComponent()
+{
+	return meshComponent;
+}
+
+UShapeComponent* ABaseProjectile::GetColisionComponent()
+{
+	return colisionComponent;
+}
+
+UMovementComponent* ABaseProjectile::GetMovementComponent()
+{
+	return movementComponent;
+}
+
+float ABaseProjectile::GetInitialSpeed()
+{
+	return initialSpeed;
+}
+
+void ABaseProjectile::SetInitialSpeed(const float& newInitialSpeed)
+{
+	initialSpeed = newInitialSpeed;
 }

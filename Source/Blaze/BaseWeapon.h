@@ -17,25 +17,28 @@ public:
 	// Sets default values for this actor's properties
 	ABaseWeapon();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere)
-		FVector offset;
-
-public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void Shoot();
+		virtual void UseThis(FVector location, FRotator rotation);
+	UFUNCTION(BlueprintCallable)
+		class UMeshComponent* GetMeshComponent();
+	UFUNCTION(BlueprintCallable)
+		class UShapeComponent* GetColisionComponent();
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:
+protected:
+	UPROPERTY(EditAnywhere)
+		FVector offset;
 	UPROPERTY(VisibleAnywhere)
-		class USkeletalMeshComponent* meshComponent;
+		class UMeshComponent* meshComponent;
 	UPROPERTY(VisibleAnywhere)
-		class UBoxComponent* collisionComponent;
-	//protected:
+		class UShapeComponent* collisionComponent;
 	UPROPERTY(EditDefaultsOnly, Category = Damage)
 		TSubclassOf<class ABaseProjectile> projectileClass;
 };

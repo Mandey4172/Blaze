@@ -3,6 +3,7 @@
 #include "BaseWeapon.h"
 #include "Engine.h"
 #include "BaseProjectile.h"
+#include "BaseCharacter.h"
 
 // Sets default values
 ABaseWeapon::ABaseWeapon()
@@ -10,11 +11,13 @@ ABaseWeapon::ABaseWeapon()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	collisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Component"));
-	collisionComponent->SetupAttachment(GetRootComponent());
+	UBoxComponent * initialCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Component"));
+	initialCollisionComponent->SetupAttachment(GetRootComponent());
+	collisionComponent = initialCollisionComponent;
 
-	meshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh Component"));
-	meshComponent->SetupAttachment(collisionComponent);
+	USkeletalMeshComponent * initialMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh Component"));
+	initialMeshComponent->SetupAttachment(collisionComponent);
+	meshComponent = initialMeshComponent;
 }
 
 // Called when the game starts or when spawned
@@ -29,15 +32,24 @@ void ABaseWeapon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ABaseWeapon::Shoot()
+void ABaseWeapon::Shoot(FVector location, FRotator rotation)
 {
 	UWorld* world = GetWorld();
 	if (world)
 	{
-		FVector location = GetActorLocation() + offset;
-		FRotator rotation = GetActorRotation();
+		location = location + offset;
 		ABaseProjectile * projectile = world->SpawnActor<ABaseProjectile>(projectileClass, location, rotation);
 		if (projectile)
 			projectile->OnFire(rotation.Vector());
 	}
+}
+
+UMeshComponent * ABaseWeapon::GetMeshComponent()
+{
+	return meshComponent;
+}
+
+UShapeComponent * ABaseWeapon::GetColisionComponent()
+{
+	return collisionComponent;
 }
