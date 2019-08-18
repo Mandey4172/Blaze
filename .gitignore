@@ -221,3 +221,8 @@ Binaries/
 Content/
 Intermediate/
 Saved/
+Config/
+
+*.vcxproj
+
+*.filters

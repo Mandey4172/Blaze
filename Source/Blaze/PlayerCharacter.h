@@ -26,7 +26,8 @@ public:
 
 	virtual void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass) override;
 
-	void Attack() override;
+	void OnAttack() override;
+
 	//
 	UPROPERTY(VisibleAnywhere)
 		class UCameraComponent * cameraComponent;

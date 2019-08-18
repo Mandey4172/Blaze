@@ -12,26 +12,30 @@ class BLAZE_API ABaseCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+	/* Sets default values for this character's properties */
 	ABaseCharacter();
 
-	// Called every frame
+	/* Called every frame */
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+	/* Called to bind functionality to input */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable, Category = "GCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
 		void MoveForward(float Value);
-	UFUNCTION(BlueprintCallable, Category = "GCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
 		void MoveRight(float Value);
 
-	UFUNCTION(BlueprintCallable)
-		virtual void Attack();
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		virtual void StartAttack();
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		virtual void StopAttack();
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		virtual void OnAttack();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
 		virtual void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
 		class ABaseWeapon* GetEquipedWeapon();
 
 protected:
@@ -40,9 +44,12 @@ protected:
 
 public:
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = Damage)
+	UPROPERTY(EditDefaultsOnly, Category = Weapon)
 		TSubclassOf<class ABaseWeapon> equpedWeaponClass;
 	class ABaseWeapon * equpedWeapon;
+
+	/* Handle to manage the timer */
+	FTimerHandle attactColdownHandle;
 
 	const FName weaponMeshSocket = TEXT("WeaponMeshSocket");
 };

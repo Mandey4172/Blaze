@@ -23,6 +23,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void Shoot(FVector location, FRotator rotation);
 	UFUNCTION(BlueprintCallable)
+		virtual bool CanShoot();
+	UFUNCTION(BlueprintCallable)
+		virtual bool ShouldContinue();
+	UFUNCTION(BlueprintCallable)
+		virtual float GetCooldown();
+	UFUNCTION(BlueprintCallable)
 		class UMeshComponent* GetMeshComponent();
 	UFUNCTION(BlueprintCallable)
 		class UShapeComponent* GetColisionComponent();
@@ -33,6 +39,10 @@ protected:
 
 public:
 protected:
+	UPROPERTY(EditAnywhere)
+		bool shouldContiniueShooting;
+	UPROPERTY(EditAnywhere)
+		float useColdown;
 	UPROPERTY(EditAnywhere)
 		FVector offset;
 	UPROPERTY(VisibleAnywhere)
