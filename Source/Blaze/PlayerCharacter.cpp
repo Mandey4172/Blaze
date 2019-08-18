@@ -49,7 +49,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent * PlayerInputCo
 
 	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &APlayerCharacter::Jump);
 
-	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &APlayerCharacter::Attack);
+	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &APlayerCharacter::StartAttack);
+	InputComponent->BindAction("Attack", EInputEvent::IE_Released, this, &APlayerCharacter::StopAttack);
 }
 
 void APlayerCharacter::EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass)
@@ -63,7 +64,7 @@ void APlayerCharacter::EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeapo
 	}
 }
 
-void APlayerCharacter::Attack()
+void APlayerCharacter::OnAttack()
 {
 	FVector location;
 	FRotator rotation;

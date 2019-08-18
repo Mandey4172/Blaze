@@ -43,7 +43,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 		class UMeshComponent* meshComponent;
 	UPROPERTY(VisibleAnywhere)
-		class UShapeComponent* colisionComponent;
+		class UShapeComponent* collisionComponent;
 	UPROPERTY(VisibleAnywhere)
 		class UMovementComponent* movementComponent;
 	UPROPERTY(EditAnywhere)

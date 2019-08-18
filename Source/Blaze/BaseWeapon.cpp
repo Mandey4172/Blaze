@@ -14,10 +14,13 @@ ABaseWeapon::ABaseWeapon()
 	UBoxComponent * initialCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Component"));
 	initialCollisionComponent->SetupAttachment(GetRootComponent());
 	collisionComponent = initialCollisionComponent;
+	SetRootComponent(collisionComponent);
 
 	USkeletalMeshComponent * initialMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh Component"));
 	initialMeshComponent->SetupAttachment(collisionComponent);
 	meshComponent = initialMeshComponent;
+
+	useColdown = 0.5f;
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +45,21 @@ void ABaseWeapon::Shoot(FVector location, FRotator rotation)
 		if (projectile)
 			projectile->OnFire(rotation.Vector());
 	}
+}
+
+bool ABaseWeapon::CanShoot()
+{
+	return true;
+}
+
+bool ABaseWeapon::ShouldContinue()
+{
+	return shouldContiniueShooting;
+}
+
+float ABaseWeapon::GetCooldown()
+{
+	return useColdown;
 }
 
 UMeshComponent * ABaseWeapon::GetMeshComponent()

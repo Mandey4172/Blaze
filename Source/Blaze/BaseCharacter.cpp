@@ -74,7 +74,29 @@ void ABaseCharacter::MoveRight(float Value)
 	AddMovementInput(Direction, Value);
 }
 
-void ABaseCharacter::Attack()
+void ABaseCharacter::StartAttack()
+{
+	if (equpedWeapon)
+	{
+		if (equpedWeapon->CanShoot())
+		{
+			OnAttack();
+			if (equpedWeapon->ShouldContinue())
+			{
+				UWorld * world = GetWorld();
+				if (world)
+					world->GetTimerManager().SetTimer(attactColdownHandle, this, &ABaseCharacter::StartAttack, equpedWeapon->GetCooldown(), false);
+			}
+		}
+	}
+}
+
+void ABaseCharacter::StopAttack()
+{
+	GetWorld()->GetTimerManager().ClearTimer(attactColdownHandle);
+}
+
+void ABaseCharacter::OnAttack()
 {
 	if (equpedWeapon)
 		equpedWeapon->Shoot(GetActorLocation(), GetActorRotation());

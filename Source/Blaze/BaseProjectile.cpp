@@ -11,10 +11,11 @@ ABaseProjectile::ABaseProjectile()
 
 	USphereComponent * initialColisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collicion Component"));
 	initialColisionComponent->SetupAttachment(GetRootComponent());
-	colisionComponent = initialColisionComponent;
+	collisionComponent = initialColisionComponent;
+	SetRootComponent(collisionComponent);
 
 	UStaticMeshComponent * initialMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
-	initialMeshComponent->SetupAttachment(colisionComponent);
+	initialMeshComponent->SetupAttachment(collisionComponent);
 	meshComponent = initialMeshComponent;
 
 	UProjectileMovementComponent * initialMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement Component"));
@@ -49,7 +50,7 @@ UMeshComponent * ABaseProjectile::GetMeshComponent()
 
 UShapeComponent* ABaseProjectile::GetColisionComponent()
 {
-	return colisionComponent;
+	return collisionComponent;
 }
 
 UMovementComponent* ABaseProjectile::GetMovementComponent()
