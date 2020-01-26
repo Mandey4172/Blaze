@@ -9,18 +9,18 @@
 ABaseWeapon::ABaseWeapon()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
-	UBoxComponent * initialCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Component"));
-	initialCollisionComponent->SetupAttachment(GetRootComponent());
-	collisionComponent = initialCollisionComponent;
-	SetRootComponent(collisionComponent);
+	//UBoxComponent * initialCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Collision Component"));
+	//initialCollisionComponent->SetupAttachment(GetRootComponent());
+	//collisionComponent = initialCollisionComponent;
+	//SetRootComponent(collisionComponent);
 
-	USkeletalMeshComponent * initialMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh Component"));
-	initialMeshComponent->SetupAttachment(collisionComponent);
-	meshComponent = initialMeshComponent;
+	//USkeletalMeshComponent * initialMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh Component"));
+	//initialMeshComponent->SetupAttachment(collisionComponent);
+	//meshComponent = initialMeshComponent;
 
-	useColdown = 0.5f;
+	useCooldown = 0.5f;
 }
 
 // Called when the game starts or when spawned
@@ -35,39 +35,25 @@ void ABaseWeapon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ABaseWeapon::Use(ACharacter * owner)
+{
+	if (owner)
+	{ 
+		FVector location;
+		FRotator rotation;
+		owner->GetActorEyesViewPoint(location, rotation);
+		Shoot(location, rotation);
+	}
+}
+
 void ABaseWeapon::Shoot(FVector location, FRotator rotation)
 {
 	UWorld* world = GetWorld();
 	if (world)
 	{
-		location = location + offset;
+		location = location + FTransform(rotation).TransformVector(offset);
 		ABaseProjectile * projectile = world->SpawnActor<ABaseProjectile>(projectileClass, location, rotation);
 		if (projectile)
 			projectile->OnFire(rotation.Vector());
 	}
-}
-
-bool ABaseWeapon::CanShoot()
-{
-	return true;
-}
-
-bool ABaseWeapon::ShouldContinue()
-{
-	return shouldContiniueShooting;
-}
-
-float ABaseWeapon::GetCooldown()
-{
-	return useColdown;
-}
-
-UMeshComponent * ABaseWeapon::GetMeshComponent()
-{
-	return meshComponent;
-}
-
-UShapeComponent * ABaseWeapon::GetColisionComponent()
-{
-	return collisionComponent;
 }
