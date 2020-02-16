@@ -15,8 +15,7 @@ class BLAZE_API AItem : public AActor //TAItem<UStaticMeshComponent, UBoxCompone
 public:
 	// Sets default values for this actor's properties
 	AItem();
-
-	//AItem(class UMeshComponent* newMeshComponent, class UShapeComponent* newCollisionComponent);
+	AItem(bool createComponents);
 
 
 	// Called every frame
@@ -42,8 +41,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	void InitBody(UMeshComponent* meshComponent, UShapeComponent* collisionComponent);
 
 public:
 protected:

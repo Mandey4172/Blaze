@@ -6,19 +6,19 @@
 #include "BaseCharacter.h"
 
 // Sets default values
-ABaseWeapon::ABaseWeapon()
+ABaseWeapon::ABaseWeapon() : AItem(false)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//UBoxComponent * initialCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Collision Component"));
-	//initialCollisionComponent->SetupAttachment(GetRootComponent());
-	//collisionComponent = initialCollisionComponent;
-	//SetRootComponent(collisionComponent);
+	UBoxComponent * initialCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Collision Component"));
+	initialCollisionComponent->SetupAttachment(GetRootComponent());
+	collisionComponent = initialCollisionComponent;
+	SetRootComponent(collisionComponent);
 
-	//USkeletalMeshComponent * initialMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh Component"));
-	//initialMeshComponent->SetupAttachment(collisionComponent);
-	//meshComponent = initialMeshComponent;
+	USkeletalMeshComponent * initialMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh Component"));
+	initialMeshComponent->SetupAttachment(collisionComponent);
+	meshComponent = initialMeshComponent;
 
 	useCooldown = 0.5f;
 }

@@ -3,39 +3,25 @@
 #include "Item.h"
 #include "Engine.h"
 
-// Sets default values
-AItem::AItem() 
-
+AItem::AItem() : AItem(true)
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
 
-	//meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
-	//collisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Shape Component"));
-
-	UBoxComponent * initialCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Item Collision Component"));
-	initialCollisionComponent->SetupAttachment(GetRootComponent());
-	collisionComponent = initialCollisionComponent;
-	SetRootComponent(collisionComponent);
-
-	UStaticMeshComponent* initialMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Item Mesh Component"));
-	initialMeshComponent->SetupAttachment(collisionComponent);
-	meshComponent = initialMeshComponent;
-
-	//InitBody(meshComponent, collisionComponent);
 }
 
-//AItem::AItem(class UMeshComponent* newMeshComponent, class UShapeComponent* newCollisionComponent)
-//{
-//	Init(newMeshComponent, newCollisionComponent);
-//}
-
-void AItem::InitBody(class UMeshComponent* uninitializedMeshComponent, class UShapeComponent* uninitializedCollisionComponent)
+AItem::AItem(bool createComponents)
 {
-	uninitializedCollisionComponent->SetupAttachment(GetRootComponent());
-	SetRootComponent(uninitializedCollisionComponent);
+	PrimaryActorTick.bCanEverTick = false;
+	if (createComponents)
+	{
+		UBoxComponent* initialCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Item Collision Component"));
+		initialCollisionComponent->SetupAttachment(GetRootComponent());
+		collisionComponent = initialCollisionComponent;
+		SetRootComponent(collisionComponent);
 
-	uninitializedMeshComponent->SetupAttachment(uninitializedCollisionComponent);
+		UStaticMeshComponent* initialMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Item Mesh Component"));
+		initialMeshComponent->SetupAttachment(collisionComponent);
+		meshComponent = initialMeshComponent;
+	}
 }
 
 // Called when the game starts or when spawned
