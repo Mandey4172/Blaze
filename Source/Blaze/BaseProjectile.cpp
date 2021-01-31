@@ -11,10 +11,11 @@ ABaseProjectile::ABaseProjectile()
 
 	USphereComponent * initialColisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collicion Component"));
 	initialColisionComponent->SetupAttachment(GetRootComponent());
-	colisionComponent = initialColisionComponent;
+	collisionComponent = initialColisionComponent;
+	SetRootComponent(collisionComponent);
 
 	UStaticMeshComponent * initialMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
-	initialMeshComponent->SetupAttachment(colisionComponent);
+	initialMeshComponent->SetupAttachment(collisionComponent);
 	meshComponent = initialMeshComponent;
 
 	UProjectileMovementComponent * initialMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement Component"));
@@ -42,22 +43,22 @@ void ABaseProjectile::OnFire(FVector direction)
 	movementComponent->Velocity = initialSpeed * direction.GetClampedToMaxSize(1.0f);
 }
 
-UMeshComponent * ABaseProjectile::GetMeshComponent()
+UMeshComponent * ABaseProjectile::GetMeshComponent() const
 {
 	return meshComponent;
 }
 
-UShapeComponent* ABaseProjectile::GetColisionComponent()
+UShapeComponent* ABaseProjectile::GetColisionComponent() const
 {
-	return colisionComponent;
+	return collisionComponent;
 }
 
-UMovementComponent* ABaseProjectile::GetMovementComponent()
+UMovementComponent* ABaseProjectile::GetMovementComponent() const
 {
 	return movementComponent;
 }
 
-float ABaseProjectile::GetInitialSpeed()
+float ABaseProjectile::GetInitialSpeed() const
 {
 	return initialSpeed;
 }

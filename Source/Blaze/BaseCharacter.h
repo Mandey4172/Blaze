@@ -12,37 +12,58 @@ class BLAZE_API ABaseCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+	/* Sets default values for this character's properties */
 	ABaseCharacter();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	/* Called every frame */
+	void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	/* Called to bind functionality to input */
+	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable, Category = "GCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		void MoveForward(float Value);
-	UFUNCTION(BlueprintCallable, Category = "GCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		void MoveRight(float Value);
 
-	UFUNCTION(BlueprintCallable)
-		virtual void Attack();
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+		virtual void StartAttack();
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+		virtual void StopAttack();
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+		virtual void OnAttack();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		virtual void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
-	UFUNCTION(BlueprintCallable)
-		class ABaseWeapon* GetEquipedWeapon();
+
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+		virtual void PickupItem(class AItem* item);
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+		virtual void DropItem(class AItem* item);
+
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+		class ABaseWeapon * GetEquipedWeapon() const;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+		virtual FVector GetCharacterEyesLocation() const;
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+		virtual FRotator GetCharacterEyesRotation() const;
+
 public:
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = Damage)
+	UPROPERTY(EditDefaultsOnly, Category = "BaseCharacter")
 		TSubclassOf<class ABaseWeapon> equpedWeaponClass;
-	class ABaseWeapon * equpedWeapon;
+	class ABaseWeapon * equippedWeapon;
 
-	const FName weaponMeshSocket = TEXT("WeaponMeshSocket");
+	UPROPERTY(EditAnywhere, Category = "BaseCharacter")
+		TArray<class AItem *> backpack;
+
+	UPROPERTY(EditAnywhere)
+		FVector rightHandOffset;
+	/* Handle to manage the timer */
+	FTimerHandle attactColdownHandle;
 };
