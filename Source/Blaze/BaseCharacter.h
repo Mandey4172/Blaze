@@ -35,8 +35,14 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "BCharacter")
 		virtual void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
+
 	UFUNCTION(BlueprintCallable, Category = "BCharacter")
-		class ABaseWeapon* GetEquipedWeapon();
+		virtual void PickupItem(class AItem* item);
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		virtual void DropItem(class AItem* item);
+
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		class ABaseWeapon * GetEquipedWeapon() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -44,12 +50,15 @@ protected:
 
 public:
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = Weapon)
+	UPROPERTY(EditDefaultsOnly, Category = "BCharacter")
 		TSubclassOf<class ABaseWeapon> equpedWeaponClass;
-	class ABaseWeapon * equpedWeapon;
+	class ABaseWeapon * equippedWeapon;
 
+	UPROPERTY(EditAnywhere, Category = "BCharacter")
+		TArray<class AItem *> backpack;
+
+	UPROPERTY(EditAnywhere)
+		FVector rightHandOffset;
 	/* Handle to manage the timer */
 	FTimerHandle attactColdownHandle;
-
-	const FName weaponMeshSocket = TEXT("WeaponMeshSocket");
 };

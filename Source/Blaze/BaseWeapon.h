@@ -3,13 +3,13 @@
 #pragma once
 
 #include "BaseProjectile.h"
-
+#include "Item.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BaseWeapon.generated.h"
 
 UCLASS()
-class BLAZE_API ABaseWeapon : public AActor
+class BLAZE_API ABaseWeapon : public AItem
 {
 	GENERATED_BODY()
 
@@ -20,19 +20,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void Use(class ACharacter * owner) override;
+
 	UFUNCTION(BlueprintCallable)
 		virtual void Shoot(FVector location, FRotator rotation);
-	UFUNCTION(BlueprintCallable)
-		virtual bool CanShoot();
-	UFUNCTION(BlueprintCallable)
-		virtual bool ShouldContinue();
-	UFUNCTION(BlueprintCallable)
-		virtual float GetCooldown();
-	UFUNCTION(BlueprintCallable)
-		class UMeshComponent* GetMeshComponent();
-	UFUNCTION(BlueprintCallable)
-		class UShapeComponent* GetColisionComponent();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,15 +31,7 @@ protected:
 public:
 protected:
 	UPROPERTY(EditAnywhere)
-		bool shouldContiniueShooting;
-	UPROPERTY(EditAnywhere)
-		float useColdown;
-	UPROPERTY(EditAnywhere)
 		FVector offset;
-	UPROPERTY(VisibleAnywhere)
-		class UMeshComponent* meshComponent;
-	UPROPERTY(VisibleAnywhere)
-		class UShapeComponent* collisionComponent;
 	UPROPERTY(EditDefaultsOnly, Category = Damage)
 		TSubclassOf<class ABaseProjectile> projectileClass;
 };

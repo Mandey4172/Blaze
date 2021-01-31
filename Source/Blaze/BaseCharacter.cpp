@@ -30,6 +30,8 @@ ABaseCharacter::ABaseCharacter()
 		movementComponent->NavWalkingFloorDistTolerance = 5.f;
 	}
 	equpedWeaponClass = ABaseWeapon::StaticClass();
+
+	rightHandOffset = FVector(0.f, 40.f, 50.f);
 }
 
 // Called when the game starts or when spawned
@@ -63,8 +65,9 @@ void ABaseCharacter::EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponC
 	UWorld * world = GetWorld();
 	if (world && equpedWeaponClass)
 	{
-		equpedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
-		equpedWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, weaponMeshSocket);
+		equippedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
+		equippedWeapon->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		equippedWeapon->AddActorLocalOffset(rightHandOffset);
 	}
 }
 
@@ -76,16 +79,16 @@ void ABaseCharacter::MoveRight(float Value)
 
 void ABaseCharacter::StartAttack()
 {
-	if (equpedWeapon)
+	if (equippedWeapon)
 	{
-		if (equpedWeapon->CanShoot())
+		if (equippedWeapon->CanUse())
 		{
 			OnAttack();
-			if (equpedWeapon->ShouldContinue())
+			if (equippedWeapon->ShouldContinue())
 			{
 				UWorld * world = GetWorld();
 				if (world)
-					world->GetTimerManager().SetTimer(attactColdownHandle, this, &ABaseCharacter::StartAttack, equpedWeapon->GetCooldown(), false);
+					world->GetTimerManager().SetTimer(attactColdownHandle, this, &ABaseCharacter::StartAttack, equippedWeapon->GetCooldown(), false);
 			}
 		}
 	}
@@ -98,11 +101,23 @@ void ABaseCharacter::StopAttack()
 
 void ABaseCharacter::OnAttack()
 {
-	if (equpedWeapon)
-		equpedWeapon->Shoot(GetActorLocation(), GetActorRotation());
+	if (equippedWeapon)
+		equippedWeapon->Use(this);
 }
 
-ABaseWeapon* ABaseCharacter::GetEquipedWeapon()
+void ABaseCharacter::PickupItem(AItem * item)
 {
-	return equpedWeapon;
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Pickup item = ") + item->GetName());
+}
+
+void ABaseCharacter::DropItem(AItem * item)
+{
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Drop item = ") + item->GetName());
+}
+
+ABaseWeapon* ABaseCharacter::GetEquipedWeapon() const
+{
+	return equippedWeapon;
 }

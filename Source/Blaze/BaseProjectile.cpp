@@ -43,22 +43,22 @@ void ABaseProjectile::OnFire(FVector direction)
 	movementComponent->Velocity = initialSpeed * direction.GetClampedToMaxSize(1.0f);
 }
 
-UMeshComponent * ABaseProjectile::GetMeshComponent()
+UMeshComponent * ABaseProjectile::GetMeshComponent() const
 {
 	return meshComponent;
 }
 
-UShapeComponent* ABaseProjectile::GetColisionComponent()
+UShapeComponent* ABaseProjectile::GetColisionComponent() const
 {
 	return collisionComponent;
 }
 
-UMovementComponent* ABaseProjectile::GetMovementComponent()
+UMovementComponent* ABaseProjectile::GetMovementComponent() const
 {
 	return movementComponent;
 }
 
-float ABaseProjectile::GetInitialSpeed()
+float ABaseProjectile::GetInitialSpeed() const
 {
 	return initialSpeed;
 }
