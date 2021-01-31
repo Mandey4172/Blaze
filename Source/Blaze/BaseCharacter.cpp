@@ -41,6 +41,22 @@ void ABaseCharacter::BeginPlay()
 	EquipWeapon(equpedWeaponClass);
 }
 
+FVector ABaseCharacter::GetCharacterEyesLocation() const
+{
+	FVector location;
+	FRotator rotation;
+	GetActorEyesViewPoint(location, rotation);
+	return location;
+}
+
+FRotator ABaseCharacter::GetCharacterEyesRotation() const
+{
+	FVector location;
+	FRotator rotation;
+	GetActorEyesViewPoint(location, rotation);
+	return rotation;
+}
+
 // Called every frame
 void ABaseCharacter::Tick(float DeltaTime)
 {

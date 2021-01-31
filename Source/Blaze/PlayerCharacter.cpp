@@ -40,6 +40,48 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
+FVector APlayerCharacter::GetCharacterEyesLocation() const
+{
+	FVector location;
+	FVector direction;
+
+	APlayerController * playerController = Cast<APlayerController>(GetController());
+	if (playerController)
+	{
+		int width;
+		int	height;
+
+		playerController->GetViewportSize(width, height);
+
+		const float centerX = width / 2;
+		const float centerY = height / 2;
+
+		playerController->DeprojectScreenPositionToWorld(centerX, centerY, location, direction);
+	}
+	return location;
+}
+
+FRotator APlayerCharacter::GetCharacterEyesRotation() const
+{
+	FVector location;
+	FVector direction;
+
+	APlayerController* playerController = Cast<APlayerController>(GetController());
+	if (playerController)
+	{
+		int width;
+		int	height;
+
+		playerController->GetViewportSize(width, height);
+
+		const float centerX = width / 2;
+		const float centerY = height / 2;
+
+		playerController->DeprojectScreenPositionToWorld(centerX, centerY, location, direction);
+	}
+	return direction.Rotation();
+}
+
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -82,14 +124,15 @@ void APlayerCharacter::SearchForAction()
 	if (world)
 	{
 		FHitResult hitResoult;
-		FVector playerLocation;
-		FRotator playerRotation;
-		GetActorEyesViewPoint(playerLocation, playerRotation);
+		const FVector playerLocation = GetCharacterEyesLocation();
+		const FRotator playerRotation = GetCharacterEyesRotation();
 		const FVector offset = actionRange * FVector(1.f, 0.f, 0.f);
+		const FVector startLocation = playerLocation + FTransform(playerRotation).TransformVector(FVector(1.f, 0.f, 0.f));
 		const FVector endLocation = playerLocation + FTransform(playerRotation).TransformVector(offset);
 
 		DrawDebugLine(world, playerLocation, endLocation, FColor::Red, false, -1.f, 0, 1.f);
 
+#ifdef DEBUG
 		if (world->LineTraceSingleByChannel(hitResoult, playerLocation, endLocation, ECollisionChannel::ECC_Visibility))
 		{
 			actionAvailable = true;
@@ -100,6 +143,7 @@ void APlayerCharacter::SearchForAction()
 			actionAvailable = false;
 			actionActor = nullptr;
 		}
+#endif // DEBUG
 	}
 }
 

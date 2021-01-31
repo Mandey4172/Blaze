@@ -16,45 +16,50 @@ public:
 	ABaseCharacter();
 
 	/* Called every frame */
-	virtual void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 
 	/* Called to bind functionality to input */
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		void MoveForward(float Value);
-	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		void MoveRight(float Value);
 
-	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		virtual void StartAttack();
-	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		virtual void StopAttack();
-	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		virtual void OnAttack();
 
-	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		virtual void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
 
-	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		virtual void PickupItem(class AItem* item);
-	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		virtual void DropItem(class AItem* item);
 
-	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 		class ABaseWeapon * GetEquipedWeapon() const;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+		virtual FVector GetCharacterEyesLocation() const;
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+		virtual FRotator GetCharacterEyesRotation() const;
+
 public:
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "BCharacter")
+	UPROPERTY(EditDefaultsOnly, Category = "BaseCharacter")
 		TSubclassOf<class ABaseWeapon> equpedWeaponClass;
 	class ABaseWeapon * equippedWeapon;
 
-	UPROPERTY(EditAnywhere, Category = "BCharacter")
+	UPROPERTY(EditAnywhere, Category = "BaseCharacter")
 		TArray<class AItem *> backpack;
 
 	UPROPERTY(EditAnywhere)
