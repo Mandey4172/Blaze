@@ -30,6 +30,8 @@ ABaseCharacter::ABaseCharacter()
 		movementComponent->NavWalkingFloorDistTolerance = 5.f;
 	}
 	equpedWeaponClass = ABaseWeapon::StaticClass();
+
+	rightHandOffset = FVector(0.f, 40.f, 50.f);
 }
 
 // Called when the game starts or when spawned
@@ -63,8 +65,9 @@ void ABaseCharacter::EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponC
 	UWorld * world = GetWorld();
 	if (world && equpedWeaponClass)
 	{
-		equpedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
-		equpedWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, weaponMeshSocket);
+		equippedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
+		equippedWeapon->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		equippedWeapon->AddActorLocalOffset(rightHandOffset);
 	}
 }
 
@@ -74,13 +77,47 @@ void ABaseCharacter::MoveRight(float Value)
 	AddMovementInput(Direction, Value);
 }
 
-void ABaseCharacter::Attack()
+void ABaseCharacter::StartAttack()
 {
-	if (equpedWeapon)
-		equpedWeapon->Shoot(GetActorLocation(), GetActorRotation());
+	if (equippedWeapon)
+	{
+		if (equippedWeapon->CanUse())
+		{
+			OnAttack();
+			if (equippedWeapon->ShouldContinue())
+			{
+				UWorld * world = GetWorld();
+				if (world)
+					world->GetTimerManager().SetTimer(attactColdownHandle, this, &ABaseCharacter::StartAttack, equippedWeapon->GetCooldown(), false);
+			}
+		}
+	}
 }
 
-ABaseWeapon* ABaseCharacter::GetEquipedWeapon()
+void ABaseCharacter::StopAttack()
 {
-	return equpedWeapon;
+	GetWorld()->GetTimerManager().ClearTimer(attactColdownHandle);
+}
+
+void ABaseCharacter::OnAttack()
+{
+	if (equippedWeapon)
+		equippedWeapon->Use(this);
+}
+
+void ABaseCharacter::PickupItem(AItem * item)
+{
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Pickup item = ") + item->GetName());
+}
+
+void ABaseCharacter::DropItem(AItem * item)
+{
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Drop item = ") + item->GetName());
+}
+
+ABaseWeapon* ABaseCharacter::GetEquipedWeapon() const
+{
+	return equippedWeapon;
 }

@@ -24,20 +24,38 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass) override;
+	UFUNCTION(BlueprintCallable)
+		void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
+	UFUNCTION(BlueprintCallable)
+		void OnAttack() override;
+	UFUNCTION(BlueprintCallable)
+		class UCameraComponent* GetCameraComponent() const;
+	UFUNCTION(BlueprintCallable)
+		class USpringArmComponent* GetCameraSpringArmComponent() const;
+	UFUNCTION(BlueprintCallable)
+		class USkeletalMeshComponent* GetFirstPersonMeshComponent() const;
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
-	void Attack() override;
 	//
 	UPROPERTY(VisibleAnywhere)
 		class UCameraComponent * cameraComponent;
 	//
 	UPROPERTY(VisibleAnywhere)
 		class USkeletalMeshComponent * firstPersonMesh;
-
+	//
 	UPROPERTY(VisibleAnywhere)
 		class USpringArmComponent * cameraSpringArm;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	float actionRange;
+
+private:
+	bool actionAvailable;
+	AActor * actionActor;
+
+	UFUNCTION(BlueprintCallable)
+		void OnAction();
+	UFUNCTION(BlueprintCallable)
+		void SearchForAction();
 };

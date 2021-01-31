@@ -215,3 +215,14 @@ FakesAssemblies/
 **/*.Server/GeneratedArtifacts
 **/*.Server/ModelManifest.xml
 _Pvt_Extensions
+
+# Unreal Engine 4 
+Binaries/
+Content/
+Intermediate/
+Saved/
+Config/
+
+*.vcxproj
+
+*.filters

@@ -3,6 +3,9 @@
 #include "PlayerCharacter.h"
 #include "Engine.h"
 #include "BaseWeapon.h"
+#include "DrawDebugHelpers.h"
+
+constexpr wchar_t * mainHandGripPoint = TEXT("GripPoint");
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -25,6 +28,11 @@ APlayerCharacter::APlayerCharacter()
 	firstPersonMesh->SetOnlyOwnerSee(true);
 
 	GetMesh()->SetOwnerNoSee(true);
+
+	actionRange = 1000.f;
+
+	actionAvailable = false;
+	actionActor = nullptr;
 }
 
 void APlayerCharacter::BeginPlay()
@@ -35,6 +43,7 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	SearchForAction();
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent * PlayerInputComponent)
@@ -49,26 +58,80 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent * PlayerInputCo
 
 	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &APlayerCharacter::Jump);
 
-	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &APlayerCharacter::Attack);
+	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &APlayerCharacter::StartAttack);
+	InputComponent->BindAction("Attack", EInputEvent::IE_Released, this, &APlayerCharacter::StopAttack);
+
+	InputComponent->BindAction("Action", EInputEvent::IE_Pressed, this, &APlayerCharacter::OnAction);
 }
 
 void APlayerCharacter::EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass)
 {
 	equpedWeaponClass = newActiveWeaponClass;
-	UWorld * world = GetWorld();
+	UWorld* world = GetWorld();
 	if (world && equpedWeaponClass)
 	{
-		equpedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
-		equpedWeapon->AttachToComponent(firstPersonMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, weaponMeshSocket);
+		equippedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
+		equippedWeapon->GetMeshComponent()->AttachToComponent(firstPersonMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, mainHandGripPoint);
+		equippedWeapon->AddActorLocalOffset(rightHandOffset);
 	}
 }
 
-void APlayerCharacter::Attack()
+void APlayerCharacter::SearchForAction()
 {
-	FVector location;
-	FRotator rotation;
-	GetActorEyesViewPoint(location, rotation);
+	UWorld* world = GetWorld();
+	if (world)
+	{
+		FHitResult hitResoult;
+		FVector playerLocation;
+		FRotator playerRotation;
+		GetActorEyesViewPoint(playerLocation, playerRotation);
+		const FVector offset = actionRange * FVector(1.f, 0.f, 0.f);
+		const FVector endLocation = playerLocation + FTransform(playerRotation).TransformVector(offset);
 
-	if (equpedWeapon)
-		equpedWeapon->Shoot(GetActorLocation(), GetActorRotation());
+		DrawDebugLine(world, playerLocation, endLocation, FColor::Red, false, -1.f, 0, 1.f);
+
+		if (world->LineTraceSingleByChannel(hitResoult, playerLocation, endLocation, ECollisionChannel::ECC_Visibility))
+		{
+			actionAvailable = true;
+			actionActor = hitResoult.GetActor();
+		}
+		else
+		{
+			actionAvailable = false;
+			actionActor = nullptr;
+		}
+	}
+}
+
+void APlayerCharacter::OnAction()
+{
+	if (actionAvailable && actionActor)
+	{
+		AItem* item = Cast<AItem>(actionActor);
+		if (item)
+		{
+			PickupItem(item);
+		}
+	}
+}
+
+void APlayerCharacter::OnAttack()
+{
+	if (equippedWeapon)
+		equippedWeapon->Use(this);
+}
+
+UCameraComponent * APlayerCharacter::GetCameraComponent() const
+{
+	return cameraComponent;
+}
+
+USpringArmComponent * APlayerCharacter::GetCameraSpringArmComponent() const
+{
+	return cameraSpringArm;
+}
+
+USkeletalMeshComponent * APlayerCharacter::GetFirstPersonMeshComponent() const
+{
+	return firstPersonMesh;
 }

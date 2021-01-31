@@ -12,27 +12,37 @@ class BLAZE_API ABaseCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+	/* Sets default values for this character's properties */
 	ABaseCharacter();
 
-	// Called every frame
+	/* Called every frame */
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+	/* Called to bind functionality to input */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable, Category = "GCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
 		void MoveForward(float Value);
-	UFUNCTION(BlueprintCallable, Category = "GCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
 		void MoveRight(float Value);
 
-	UFUNCTION(BlueprintCallable)
-		virtual void Attack();
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		virtual void StartAttack();
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		virtual void StopAttack();
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		virtual void OnAttack();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
 		virtual void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
-	UFUNCTION(BlueprintCallable)
-		class ABaseWeapon* GetEquipedWeapon();
+
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		virtual void PickupItem(class AItem* item);
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		virtual void DropItem(class AItem* item);
+
+	UFUNCTION(BlueprintCallable, Category = "BCharacter")
+		class ABaseWeapon * GetEquipedWeapon() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,9 +50,15 @@ protected:
 
 public:
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = Damage)
+	UPROPERTY(EditDefaultsOnly, Category = "BCharacter")
 		TSubclassOf<class ABaseWeapon> equpedWeaponClass;
-	class ABaseWeapon * equpedWeapon;
+	class ABaseWeapon * equippedWeapon;
 
-	const FName weaponMeshSocket = TEXT("WeaponMeshSocket");
+	UPROPERTY(EditAnywhere, Category = "BCharacter")
+		TArray<class AItem *> backpack;
+
+	UPROPERTY(EditAnywhere)
+		FVector rightHandOffset;
+	/* Handle to manage the timer */
+	FTimerHandle attactColdownHandle;
 };
