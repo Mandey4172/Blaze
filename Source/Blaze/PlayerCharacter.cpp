@@ -5,6 +5,8 @@
 #include "BaseWeapon.h"
 #include "DrawDebugHelpers.h"
 
+constexpr wchar_t * mainHandGripPoint = TEXT("GripPoint");
+
 APlayerCharacter::APlayerCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -62,6 +64,18 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent * PlayerInputCo
 	InputComponent->BindAction("Action", EInputEvent::IE_Pressed, this, &APlayerCharacter::OnAction);
 }
 
+void APlayerCharacter::EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass)
+{
+	equpedWeaponClass = newActiveWeaponClass;
+	UWorld* world = GetWorld();
+	if (world && equpedWeaponClass)
+	{
+		equippedWeapon = world->SpawnActor<ABaseWeapon>(equpedWeaponClass);
+		equippedWeapon->GetMeshComponent()->AttachToComponent(firstPersonMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, mainHandGripPoint);
+		equippedWeapon->AddActorLocalOffset(rightHandOffset);
+	}
+}
+
 void APlayerCharacter::SearchForAction()
 {
 	UWorld* world = GetWorld();
@@ -91,15 +105,12 @@ void APlayerCharacter::SearchForAction()
 
 void APlayerCharacter::OnAction()
 {
-	if (actionAvailable)
+	if (actionAvailable && actionActor)
 	{
-		if (actionActor)
+		AItem* item = Cast<AItem>(actionActor);
+		if (item)
 		{
-			AItem * item = Cast<AItem>(actionActor);
-			if (item)
-			{
-				PickupItem(item);
-			}
+			PickupItem(item);
 		}
 	}
 }
