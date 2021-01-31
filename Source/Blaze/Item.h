@@ -36,7 +36,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual class UMeshComponent * GetMeshComponent() const;
 	UFUNCTION(BlueprintCallable)
-		class UShapeComponent* GetColisionComponent() const;
+		virtual class UShapeComponent* GetColisionComponent() const;
 
 protected:
 	// Called when the game starts or when spawned
