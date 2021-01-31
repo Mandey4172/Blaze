@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\Blaze.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{864B2043-7AA0-4C8A-BB76-4C232274784F}</UniqueIdentifier>
+      <UniqueIdentifier>{CB5A06F0-8A25-4BB6-9FDB-E92F74049C65}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\Blaze.Target.cs">
       <Filter>Source</Filter>
@@ -16,8 +16,11 @@
     <None Include="..\..\LICENSE.md" />
     <None Include="..\..\README.md" />
     <Filter Include="Config">
-      <UniqueIdentifier>{05358ACB-EF9A-43B8-985E-5F1003676AAD}</UniqueIdentifier>
+      <UniqueIdentifier>{B8DB0619-5CC0-4F25-9C4F-CD4022814880}</UniqueIdentifier>
     </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
     <None Include="..\..\Config\DefaultEngine.ini">
       <Filter>Config</Filter>
     </None>
@@ -25,7 +28,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\Blaze">
-      <UniqueIdentifier>{2733786D-AF80-4F8E-987C-94EE17E1984F}</UniqueIdentifier>
+      <UniqueIdentifier>{8FF535C4-299A-40CB-ADF5-845C18C07FDE}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\Blaze\BaseCharacter.cpp">
       <Filter>Source\Blaze</Filter>
