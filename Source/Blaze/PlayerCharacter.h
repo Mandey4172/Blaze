@@ -24,10 +24,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable)
-		void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass);
-	UFUNCTION(BlueprintCallable)
-		void OnAttack() override;
+	void EquipWeapon(TSubclassOf<class ABaseWeapon> newActiveWeaponClass)override;
+	void OnAttack() override;
+
 	UFUNCTION(BlueprintCallable)
 		class UCameraComponent* GetCameraComponent() const;
 	UFUNCTION(BlueprintCallable)
